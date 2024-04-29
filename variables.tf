@@ -17,3 +17,8 @@ variable "instance_name" {
   description = "Name tag for the EC2 instance"
   default     = "doctolib"
 }
+
+variable "allowed_ip" {
+  description = "IP address allowed to access the EC2 instance"
+  type        = string
+}
