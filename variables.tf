@@ -22,3 +22,26 @@ variable "allowed_ip" {
   description = "IP address allowed to access the EC2 instance"
   type        = string
 }
+
+variable "bucket_name" {
+  description = "Name of the S3 bucket"
+  type        = string
+}
+
+variable "iam_role_name" {
+  description = "Name of the IAM role"
+  type        = string
+  default     = "doctolib-ec2-role"
+}
+
+variable "iam_policy_name" {
+  description = "Name of the IAM policy"
+  type        = string
+  default     = "doctolib-s3-write-policy"
+}
+
+variable "iam_instance_profile_name" {
+  description = "Name of the IAM instance profile"
+  type        = string
+  default     = "doctolib-instance-profile"
+}
