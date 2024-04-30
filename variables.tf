@@ -45,3 +45,8 @@ variable "iam_instance_profile_name" {
   type        = string
   default     = "doctolib-instance-profile"
 }
+
+variable "iam_role_arn" {
+  description = "ARN of the IAM role that should have access to the S3 bucket"
+  type        = string
+}

@@ -27,9 +27,18 @@ resource "aws_s3_bucket" "doctolib" {
   bucket = var.bucket_name
 }
 
+
 resource "aws_s3_bucket_acl" "doctolib" {
   bucket = aws_s3_bucket.doctolib.id
   acl    = "private"
+}
+
+resource "aws_s3_bucket_ownership_controls" "doctolib" {
+  bucket = aws_s3_bucket.doctolib.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
 }
 
 resource "aws_iam_policy" "doctolib" {
@@ -76,4 +85,22 @@ resource "aws_iam_role_policy_attachment" "doctolib" {
 resource "aws_iam_instance_profile" "doctolib" {
   name = var.iam_instance_profile_name
   role = aws_iam_role.doctolib.name
+}
+
+resource "aws_s3_bucket_policy" "doctolib" {
+  bucket = aws_s3_bucket.doctolib.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = "s3:PutObject",
+        Resource = "${aws_s3_bucket.doctolib.arn}/can_be_written/*",
+        Principal = {
+          AWS = [var.iam_role_arn]
+        }
+      }
+    ]
+  })
 }
