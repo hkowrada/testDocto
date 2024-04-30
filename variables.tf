@@ -50,3 +50,19 @@ variable "iam_role_arn" {
   description = "ARN of the IAM role that should have access to the S3 bucket"
   type        = string
 }
+
+variable "ssh_user" {
+  description = "SSH user for connecting to the EC2 instance"
+  type        = string
+  default     = "ubuntu"
+}
+
+variable "ssh_private_key" {
+  description = "SSH private key for connecting to the EC2 instance"
+  type        = string
+}
+
+variable "ssh_key_pair_name" {
+  description = "Name of the SSH key pair"
+  type        = string
+}

@@ -7,8 +7,38 @@ resource "aws_instance" "doctolib" {
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.doctolib.id]
   iam_instance_profile   = aws_iam_instance_profile.doctolib.name
+  key_name               = var.ssh_key_pair_name
+  depends_on             = [aws_security_group.doctolib]
+
   tags = {
     Name = var.instance_name
+  }
+}
+
+resource "null_resource" "install_docker" {
+  depends_on = [aws_instance.doctolib]
+
+  triggers = {
+    instance_id = aws_instance.doctolib.id
+  }
+
+  connection {
+    type        = "ssh"
+    user        = var.ssh_user
+    private_key = file(var.ssh_private_key)
+    host        = aws_instance.doctolib.public_ip
+  }
+
+  provisioner "file" {
+    source      = "install_docker.sh"
+    destination = "/tmp/install_docker.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/install_docker.sh",
+      "/tmp/install_docker.sh"
+    ]
   }
 }
 
